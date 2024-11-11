@@ -27,26 +27,26 @@ async function getRowByColumn<T = any>({
 
     if (error) throw error;
 
-    let imageUrl = null;
+    let image = null;
     if (withImage && rowData?.image_path) {
       const { data: imageData } = supabase
         .storage
         .from(storageBucket) 
         .getPublicUrl(rowData.image_path);
       
-      imageUrl = imageData.publicUrl;
+      image = imageData.publicUrl;
     }
 
     return { 
       data: rowData as T, 
-      imageUrl,
+      image,
       error: null 
     };
 
   } catch (error) {
     return {
       data: null,
-      imageUrl: null,
+      image: null,
       error: error instanceof Error ? error.message : 'An error occurred'
     };
   }

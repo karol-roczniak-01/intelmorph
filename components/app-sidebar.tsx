@@ -3,16 +3,20 @@
 import * as React from "react"
 import {
   AudioWaveform,
-  BookOpen,
-  Bot,
-  Frame,
-  GalleryVerticalEnd,
-  Settings2,
-  SquareTerminal,
+  Command,
+  Home,
+  Inbox,
+  Link,
+  Newspaper,
+  Podcast,
+  Search,
+  Image as FigureImage,
+  Eye,
+  Headphones,
+  BookHeadphones,
+  LibraryBig
 } from "lucide-react"
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
 import { TeamSwitcher } from "@/components/team-switcher"
 import {
@@ -23,115 +27,148 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { UserDetails } from "@/types"
+import { NavMain } from "./nav-main"
+import { NavItems} from "./nav-items"
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
-  userData: {
-    data: UserDetails | null;
-    imageUrl: string | null;
-    error?: string | null;
-  };
+  userData: UserDetails | null;
+  userImage: string | null;
   userAuthEmail: string | null;
 }
 
 // This is sample data.
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   teams: [
     {
       name: "Acme Inc",
-      logo: GalleryVerticalEnd,
+      logo: Command,
       plan: "Enterprise",
     },
     {
       name: "Acme Corp.",
       logo: AudioWaveform,
       plan: "Startup",
-    }
+    },
+    {
+      name: "Evil Corp.",
+      logo: Command,
+      plan: "Free",
+    },
   ],
   navMain: [
     {
-      title: "Playground",
+      title: "Home",
       url: "#",
-      icon: SquareTerminal,
+      icon: Home,
       isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        }
-      ],
     },
     {
-      title: "Models",
+      title: "Search",
       url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        }
-      ],
+      icon: Search,
     },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        }
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        }
-      ],
-    },
+
   ],
-  projects: [
+  items: [
     {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    }
+      title: "Podcasts",
+      icon: Podcast,
+      subItems: [
+        {
+          title: "Daily Journal & Reflection",
+          url: "#",
+        }
+      ],
+    },
+    {
+      title: "Papers",
+      icon: Newspaper,
+      subItems: [
+        {
+          title: "Career Objectives & Milestones",
+          url: "#",
+        }
+      ],
+    },
+    {
+      title: "References",
+      icon: Link,
+      subItems: [
+        {
+          title: "Writing Ideas & Story Outlines",
+          url: "#",
+        }
+      ],
+    },
+    {
+      title: "Figures",
+      icon: FigureImage,
+      subItems: [
+        {
+          title: "Household Budget & Expense Tracking",
+          url: "#",
+        }
+      ],
+    },
+    {
+      title: "Reviewed",
+      icon: Eye,
+      subItems: [
+        {
+          title: "Trip Planning & Itineraries",
+          url: "#",
+        }
+      ],
+    },
+    {
+      title: "Playlists",
+      icon: Headphones,
+      subItems: [
+        {
+          title: "Trip Planning & Itineraries",
+          url: "#",
+        }
+      ],
+    },
+    {
+      title: "Series",
+      icon: BookHeadphones,
+      subItems: [
+        {
+          title: "Trip Planning & Itineraries",
+          url: "#",
+        }
+      ],
+    },
+    {
+      title: "Readings",
+      icon: LibraryBig,
+      subItems: [
+        {
+          title: "Trip Planning & Itineraries",
+          url: "#",
+        }
+      ],
+    },
   ],
 }
 
-export function AppSidebar({ userData, userAuthEmail, ...props }: AppSidebarProps) {
-  
-  // Format user data for NavUser component
-  const userForNav = {
-    first_name: userData.data?.first_name || 'Jon',
-    last_name: userData.data?.last_name || 'Snow',
-    avatar: userData.imageUrl || '',
-    email: userAuthEmail || 'No email',
-
-  }
+export function AppSidebar({ userData, userImage, userAuthEmail, ...props }: AppSidebarProps) {
   
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
+        <NavMain items={data.navMain} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavItems items={data.items}/>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser 
-          userData={userForNav} 
-          userAuthEmail={userAuthEmail || ''} 
+        <NavUser
+          userData={userData}
+          userImage={userImage}
+          userAuthEmail={userAuthEmail || ''}
         />
       </SidebarFooter>
       <SidebarRail />

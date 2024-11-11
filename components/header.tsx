@@ -1,14 +1,18 @@
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from "./ui/breadcrumb";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "./ui/breadcrumb";
 import { Separator } from "./ui/separator";
 import { SidebarTrigger } from "./ui/sidebar";
 
 interface HeaderProps {
-  path: string;
+  parentPath: string;
+  parentPathLink?: string;
+  childPath?: string;
   children?: React.ReactNode;
 }
 
 const Header: React.FC<HeaderProps> = ({
-  path,
+  parentPath,
+  parentPathLink,
+  childPath,
   children
 }) => {
   return (
@@ -20,10 +24,21 @@ const Header: React.FC<HeaderProps> = ({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">
-                  {path}
+                <BreadcrumbLink 
+                  className={childPath ? '' : 'hover:text-muted-foreground'}
+                  href={childPath && parentPathLink}
+                >
+                  {parentPath}
                 </BreadcrumbLink>
               </BreadcrumbItem>
+              {childPath && (
+                <>
+                <BreadcrumbSeparator className="hidden md:block" />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{childPath}</BreadcrumbPage>
+                </BreadcrumbItem>
+                </>
+              )}
             </BreadcrumbList>
           </Breadcrumb>
         </div>

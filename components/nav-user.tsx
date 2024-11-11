@@ -30,20 +30,18 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { signOutAction } from "@/actions/auth-actions"
+import { UserDetails } from "@/types"
 
 interface NavUserProps {
-  userData: {
-    first_name: string;
-    last_name: string;
-    avatar: string;
-  };
+  userData: UserDetails | null;
+  userImage: string | null;
   userAuthEmail: string;
 }
 
-export function NavUser({ userData, userAuthEmail }: NavUserProps) {
+export function NavUser({ userData, userImage, userAuthEmail }: NavUserProps) {
   const { isMobile } = useSidebar()
   
-  const fullName = `${userData.first_name} ${userData.last_name}`;
+  const fullName = `${userData?.first_name} ${userData?.last_name}`;
 
   return (
     <SidebarMenu>
@@ -55,9 +53,9 @@ export function NavUser({ userData, userAuthEmail }: NavUserProps) {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={userData.avatar} alt={userData.first_name} />
+                <AvatarImage src={userImage || ''} alt={userData?.first_name} />
                 <AvatarFallback className="rounded-lg">
-                  {userData.first_name[0]}{userData.last_name[0]}
+                  {userData?.first_name[0]}{userData?.last_name[0]}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
@@ -76,9 +74,9 @@ export function NavUser({ userData, userAuthEmail }: NavUserProps) {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={userData.avatar} alt={userData.first_name} />
+                  <AvatarImage src={userImage || ''} alt={userData?.first_name} />
                   <AvatarFallback className="rounded-lg">
-                    {userData.first_name[0]}{userData.last_name[0]}
+                    {userData?.first_name[0]}{userData?.last_name[0]}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">

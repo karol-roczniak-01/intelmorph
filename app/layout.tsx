@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.className} h-screen`} suppressHydrationWarning>
-      <body className="bg-background text-foreground">
+      <body className="bg-background text-foreground w-full">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
