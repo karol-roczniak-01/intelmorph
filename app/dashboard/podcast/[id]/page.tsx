@@ -8,11 +8,10 @@ import { redirect } from "next/navigation";
 import PageContent from "../components/podcast-info";
 import ActionButton from "@/components/action-button";
 
-// Fix 1: Remove the await from the params type
 export default async function Podcast({
   params,
 }: {
-  params: { id: string }  // Remove Promise type
+  params: { id: any }
 }) {
   const supabase = await createClient();
 
@@ -24,11 +23,10 @@ export default async function Podcast({
     return redirect("/sign-in");
   }
 
-  // Fix 2: Remove the await from params.id
   const { data: podcastData, file: podcastFile } = await getRow<PodcastDetails>({
     table: 'podcasts',
     column: 'id',
-    value: params.id,  // Remove await
+    value: params.id,
     withFile: true,
     storageBucket: 'podcast_covers'
   });
