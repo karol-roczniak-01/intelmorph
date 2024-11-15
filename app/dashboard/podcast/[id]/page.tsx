@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import getRow from "@/actions/get-row";
 import Header from "@/components/header";
 import { Button } from "@/components/ui/button";
@@ -8,11 +9,15 @@ import { redirect } from "next/navigation";
 import PageContent from "../components/podcast-info";
 import ActionButton from "@/components/action-button";
 
-export default async function Podcast({
-  params,
-}: {
-  params: { id: any }
-}) {
+// Define the props interface
+interface PageProps {
+  params: {
+    id: string;
+  };
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
+
+export default async function Podcast({ params }: PageProps) {
   const supabase = await createClient();
 
   const {
