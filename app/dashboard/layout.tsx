@@ -1,12 +1,11 @@
-import getRowByColumn from "@/actions/get-row-by-column";
+import getRow from "@/actions/get-row";
+import getRows from "@/actions/get-rows";
 import { AppSidebar } from "@/components/app-sidebar";
-import Header from "@/components/header";
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import { Button } from "@/components/ui/button";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { UserDetails } from "@/types";
+import { Toaster } from "@/components/ui/toaster";
+import DialogProvider from "@/providers/dialog-provider";
+import { PodcastDetails, UserDetails } from "@/types";
 import { createClient } from "@/utils/supabase/server";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({
@@ -15,7 +14,7 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const supabase = await createClient();
-
+  
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -24,38 +23,43 @@ export default async function DashboardLayout({
     return redirect("/sign-in");
   }
 
-  const { data: userData, image: userImage } = await getRowByColumn<UserDetails>({
+  const { data: userData, file: userFile } = await getRow<UserDetails>({
     table: 'users',
     column: 'id',
     value: user.id,
-    withImage: true,
+    withFile: true,
     storageBucket: 'avatars'
   });
   
-  
+  const { data: podcastData, file: podcastFile } = await getRows<PodcastDetails>({
+    table: 'podcasts',
+    column: 'user_id',
+    value: user.id,
+    withFile: true,
+    storageBucket: 'podcast_covers'
+  });
+
   return (
     <SidebarProvider>
       <AppSidebar
+        //User
+        userId={user.id}
         userData={userData}
-        userImage={userImage}
+        userFile={userFile}
         userAuthEmail={user.email || ''}
+
+        //Podcasts
+        podcastData={podcastData}
+        podcastFile={podcastFile}
+
+        //Papers
+
       />
       <SidebarInset>
-        <Header parentPath="Dashboard">
-          <ThemeSwitcher />
-          {!user && (
-            <div className="flex gap-2">
-              <Button asChild size="sm" variant={"outline"}>
-                <Link href="/sign-in">Sign in</Link>
-              </Button>
-              <Button asChild size="sm" variant={"default"}>
-                <Link href="/sign-up">Sign up</Link>
-              </Button>
-            </div>
-          )}
-        </Header>
         {children}
       </SidebarInset>
+      <Toaster />
+      <DialogProvider />
     </SidebarProvider>
   );
 }

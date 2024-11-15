@@ -28,29 +28,27 @@ const ThemeSwitcher = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="aspect-square p-0 w-8 h-8" variant="ghost">
+        <Button className="aspect-square justify-start p-0 w-full h-8 cursor-default px-2 font-normal" variant="ghost">
           {theme === "light" ? (
             <Sun
               key="light"
               size={30}
-              className={"text-muted-foreground shrink-0"}
-              strokeWidth={2.5}
+              className={"shrink-0"}
             />
           ) : theme === "dark" ? (
             <Moon
               key="dark"
               size={30}
-              className={"text-muted-foreground shrink-0"}
-              strokeWidth={2.5}
+              className={"shrink-0"}
             />
           ) : (
             <Laptop
               key="system"
               size={30}
-              className={"text-muted-foreground shrink-0"}
-              strokeWidth={2.5}
+              className={"shrink-0"}
             />
           )}
+          <span>Theme</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-content" align="start">

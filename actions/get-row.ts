@@ -4,16 +4,16 @@ type QueryConfig = {
   table: string;
   column: string;
   value: string | number;
-  withImage?: boolean;
+  withFile?: boolean;
   storageBucket?: string;
 };
 
-async function getRowByColumn<T = any>({
+async function getRow<T = any>({
   table,
   column,
   value,
-  withImage = false,
-  storageBucket = 'avatars'
+  withFile = false,
+  storageBucket = ''
 }: QueryConfig) {
   try {
     const supabase = await createClient();
@@ -27,29 +27,29 @@ async function getRowByColumn<T = any>({
 
     if (error) throw error;
 
-    let image = null;
-    if (withImage && rowData?.image_path) {
-      const { data: imageData } = supabase
+    let file = null;
+    if (withFile && rowData?.file_path) {
+      const { data: fileData } = supabase
         .storage
         .from(storageBucket) 
-        .getPublicUrl(rowData.image_path);
+        .getPublicUrl(rowData.file_path);
       
-      image = imageData.publicUrl;
+      file = fileData.publicUrl;
     }
 
     return { 
       data: rowData as T, 
-      image,
+      file,
       error: null 
     };
 
   } catch (error) {
     return {
       data: null,
-      image: null,
+      file: null,
       error: error instanceof Error ? error.message : 'An error occurred'
     };
   }
 }
 
-export default getRowByColumn;
+export default getRow;

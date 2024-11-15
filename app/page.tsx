@@ -10,7 +10,7 @@ export default async function Home() {
   } = await supabase.auth.getUser();
 
   return (
-    <div className="h-full w-full flex flex-col bg-red-100/20">
+    <div className="h-full w-full flex flex-col">
       <div className="flex items-center h-16 shrink-0 w-full justify-end px-4">
         {!user ? (
           <div className="flex gap-2">
