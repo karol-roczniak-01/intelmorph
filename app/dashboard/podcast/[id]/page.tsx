@@ -8,10 +8,11 @@ import { redirect } from "next/navigation";
 import PageContent from "../components/podcast-info";
 import ActionButton from "@/components/action-button";
 
-export default async function Podcast({ params }: {
-  params: {
-    id: string
-  }
+// Fix 1: Remove the await from the params type
+export default async function Podcast({
+  params,
+}: {
+  params: { id: string }  // Remove Promise type
 }) {
   const supabase = await createClient();
 
@@ -23,10 +24,11 @@ export default async function Podcast({ params }: {
     return redirect("/sign-in");
   }
 
+  // Fix 2: Remove the await from params.id
   const { data: podcastData, file: podcastFile } = await getRow<PodcastDetails>({
     table: 'podcasts',
     column: 'id',
-    value: (await params).id,
+    value: params.id,  // Remove await
     withFile: true,
     storageBucket: 'podcast_covers'
   });
@@ -40,15 +42,14 @@ export default async function Podcast({ params }: {
             itemId={podcastData?.id || ''}
             itemUserId={podcastData?.user_id || ''}
             table='backed_podcasts'
-            actionType='back'    
-                
+            actionType='back'
           />
           <ActionButton 
             userId={user.id}
             itemId={podcastData?.id || ''}
             itemUserId={podcastData?.user_id || ''}
             table='liked_podcasts'
-            actionType='like'        
+            actionType='like'
           />
         </div>
         {!user && (
@@ -56,14 +57,14 @@ export default async function Podcast({ params }: {
             <Button asChild size="sm" variant={"outline"}>
               <Link href="/sign-in">Sign in</Link>
             </Button>
-             <Button asChild size="sm" variant={"default"}>
+            <Button asChild size="sm" variant={"default"}>
               <Link href="/sign-up">Sign up</Link>
             </Button>
           </div>
         )}
       </Header>
       <PageContent 
-        podcastData={podcastData} 
+        podcastData={podcastData}
         podcastFile={podcastFile}
       />
     </div>
