@@ -1,4 +1,3 @@
-import { Metadata } from "next";
 import getRow from "@/actions/get-row";
 import Header from "@/components/header";
 import { Button } from "@/components/ui/button";
@@ -9,16 +8,11 @@ import { redirect } from "next/navigation";
 import PageContent from "../components/podcast-info";
 import ActionButton from "@/components/action-button";
 
-// Define the props interface
-interface PageProps {
-  params: {
-    id: string;
-  };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}
-
-export default async function Podcast({ params }: PageProps) {
+export default async function Podcast({ params }: {
+  params: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
   const supabase = await createClient();
+  const itemId = (await params).id
 
   const {
     data: { user },
@@ -31,7 +25,7 @@ export default async function Podcast({ params }: PageProps) {
   const { data: podcastData, file: podcastFile } = await getRow<PodcastDetails>({
     table: 'podcasts',
     column: 'id',
-    value: params.id,
+    value: itemId,
     withFile: true,
     storageBucket: 'podcast_covers'
   });

@@ -3,7 +3,7 @@ import { createClient } from "@/utils/supabase/server";
 type QueryConfig = {
   table: string;
   column: string;
-  value: string | number;
+  value: any;
   withFile?: boolean;
   storageBucket?: string;
 };
